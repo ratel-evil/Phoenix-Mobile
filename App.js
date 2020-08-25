@@ -24,7 +24,13 @@ const App = () => {
         <Stack.Screen 
           name="Login" 
           component={Login} 
-          options={{ title: 'Login' }}
+          options={{ 
+            title: 'Login',
+            headerStyle: {
+              backgroundColor: "#63b370"
+            },
+            headerTintColor: '#fff'
+           }}
         />
       </Stack.Navigator>
     </NavigationContainer>

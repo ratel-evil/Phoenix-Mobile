@@ -10,8 +10,8 @@ function Login({ navigation }) {
                 <TextInput style={styles.input} placeholder={'Usuário'}></TextInput>    
                 <TextInput style={styles.input} placeholder={'Senha'}></TextInput>    
                 <View style={styles.buttons}>
-                    <Button color="#63b370" title={'Entrar'} onPress={() => console.warn('clicou em entrar')}/>
                     <Button color="#63b370" title={'Cadastrar'} onPress={() => console.warn('clicou em sua mãe')}/>
+                    <Button color="#63b370" title={'Entrar'} onPress={() => console.warn('clicou em entrar')}/>
                 </View>
                 <Image source={BackgroundImage} style={styles.backImage}/>
             </View>
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
         borderColor: 'grey',
         borderWidth: 1,
         width: 200,
-        height: 40,
+        height: 45,
         paddingTop:10,
         borderRadius: 5,
         shadowColor: "#000",
