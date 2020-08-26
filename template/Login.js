@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     View,
     Image,
@@ -22,37 +22,26 @@ function Login({ navigation }) {
     
     const [username, setUsername] = React.useState('');
     const [password, setPassword] = React.useState('');
-
-    const handleUser = (e) => {
-        console.warn(e)
-    }
+   
 
     return (
         <KeyboardAvoidingView 
             behavior={Platform.OS === "ios" ? "padding" : null} 
             style={styles.container} 
-            resetScrollTocoords={{x:0,y:0}}
-            
             >
             <Image source={LogoPhoenix} style={styles.logo } />
             <TextInput style={styles.input} placeholder={'Usuário'} onChangeText={setUsername}></TextInput>
             
-            <TextInput style={styles.input} placeholder={'Senha'} onChangeText={setPassword}></TextInput>
+            <TextInput style={styles.input} placeholder={'Senha'} onChangeText={setPassword} secureTextEntry={true}></TextInput>
             
             <View style={styles.buttons}>
-                <Button color="#63b370" title={'Cadastrar'} onPress={() => console.warn('clicou em cadstrar')} />
-                <Button color="#63b370" title={'Entrar'} onPress={() => console.warn('clicou em entrar')} />
+                <Button color="#63b370" title={'Cadastrar'} onPress={() => {
+                    navigation.navigate('SignUp')
+
+                }} />
+                <Button color="#63b370" title={'Entrar'} onPress={() => console.warn('login')} />
             </View>
             <Image source={BackgroundImage} style={styles.backImage} />
-            {/* <SafeAreaView>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.container}>
-
-
-
-                    </View>
-                </TouchableWithoutFeedback>
-            </SafeAreaView> */}
         </KeyboardAvoidingView>
     );
 }

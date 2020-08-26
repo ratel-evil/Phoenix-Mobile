@@ -12,6 +12,7 @@ import 'react-native-gesture-handler';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './template/Login';
+import SignUp from './template/SignUp';
 
 const AuthContext = React.createContext();
 
@@ -26,6 +27,21 @@ const App = () => {
           component={Login}
           options={{
             title: 'Login',
+            headerStyle: {
+              backgroundColor: "#63b370",
+              height: 50,
+              
+            },
+            headerTintColor: '#fff',
+            safeAreaInsets: { top: 0 }
+
+          }}
+        />
+        <Stack.Screen
+          name="SignUp"
+          component={SignUp}
+          options={{
+            title: 'SignUp',
             headerStyle: {
               backgroundColor: "#63b370",
               height: 50,
