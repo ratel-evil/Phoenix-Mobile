@@ -21,16 +21,20 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen 
-          name="Login" 
-          component={Login} 
-          options={{ 
+        <Stack.Screen
+          name="Login"
+          component={Login}
+          options={{
             title: 'Login',
             headerStyle: {
-              backgroundColor: "#63b370"
+              backgroundColor: "#63b370",
+              height: 50,
+              
             },
-            headerTintColor: '#fff'
-           }}
+            headerTintColor: '#fff',
+            safeAreaInsets: { top: 0 }
+
+          }}
         />
       </Stack.Navigator>
     </NavigationContainer>
