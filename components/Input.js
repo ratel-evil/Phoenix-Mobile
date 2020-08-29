@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
 
-import {TextInput} from 'react-native';
+import {TextInput, Text, StyleSheet} from 'react-native';
 import {useField} from '@unform/core';
 
 function Input({name, ...rest}) {
@@ -32,19 +32,31 @@ function Input({name, ...rest}) {
   }, [fieldName, registerField]);
 
   return (
-    <TextInput
-      ref={inputRef}
-      keyboardAppearance="light"
-      defaultValue={defaultValue}
-      placeholderTextColor="#666360"
-      onChangeText={(value) => {
-        if (inputRef.current) {
-          inputRef.current.value = value;
-        }
-      }}
-      {...rest}
-    />
+    <>
+      <TextInput
+        ref={inputRef}
+        defaultValue={defaultValue}
+        className={error ? 'has-error' : ''}
+        placeholderTextColor="#666360"
+        onChangeText={(value) => {
+          if (inputRef.current) {
+            inputRef.current.value = value;
+          }
+        }}
+        {...rest}
+      />
+      {error && <Text style={styles.error}>{error}</Text>}
+    </>
   );
 }
+
+const styles = StyleSheet.create({
+  error: {
+    width: 300,
+    color: 'red',
+    marginBottom: 10,
+    textAlign: 'left',
+  },
+});
 
 export default Input;

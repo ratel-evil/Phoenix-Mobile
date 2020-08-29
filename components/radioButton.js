@@ -10,6 +10,7 @@ const SelectedRadioButton = () => {
   const [radioButtonSelected, setRadioButtonSelected] = useState(0);
   return (
     <RadioForm
+      name="selectRadio"
       selectedButtonColor={'#63b370'}
       buttonColor={'#63b370'}
       radio_props={radio_props}

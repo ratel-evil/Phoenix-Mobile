@@ -8,6 +8,7 @@ const Date = () => {
 
   return (
     <DatePicker
+      name="dataNascimento"
       format="DD/MM/YYYY"
       style={styles.selectedDate}
       date={selectedDate}

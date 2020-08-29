@@ -1,4 +1,5 @@
 import React, {useRef} from 'react';
+import * as Yup from 'yup';
 import {
   Button,
   Dimensions,
@@ -20,8 +21,40 @@ import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 
 const SignUp = ({navigation}) => {
   const formRef = useRef(null);
-  function handleSubmit(data) {
-    console.warn('Cadastrar');
+
+  async function handleSubmit(data, {reset}) {
+    try {
+      const schema = Yup.object().shape({
+        nome: Yup.string().required('O nome é obrigatório'),
+        sobrenome: Yup.string().required('O sobrenome é obrigatório'),
+        email: Yup.string()
+          .email('Digite um e-mail válido')
+          .required('O e-mail é obrigatório'),
+        password: Yup.string()
+          .min(6, 'No mínimo 6 caracteres')
+          .required('Senha é obrigatória'),
+        confirmPassword: Yup.string()
+          .min(6, 'No mínimo 6 caracteres')
+          .required('Sua confirmação de senha deve ser igual a senha'),
+      });
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+      // Validation passed
+      console.warn(data);
+      formRef.current.setErrors({});
+      reset();
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errorMessages = {};
+
+        err.inner.forEach((error) => {
+          errorMessages[error.path] = error.message;
+        });
+
+        formRef.current.setErrors(errorMessages);
+      }
+    }
   }
 
   return (
@@ -58,7 +91,7 @@ const SignUp = ({navigation}) => {
             />
             <Input
               style={styles.input}
-              name="password"
+              name="confirmPassword"
               type="password"
               placeholder="Confirmar Senha"
             />
@@ -70,9 +103,11 @@ const SignUp = ({navigation}) => {
           </View>
 
           <Text>Você tem vontade de ser um doador de órgãos?</Text>
+
           <View style={styles.radioButtons}>
             <RadioButton />
           </View>
+
           <View style={styles.btnCadastrar}>
             <Button
               style={styles.buttons}
@@ -91,14 +126,14 @@ const sizes = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: sizes.width,
-    height: sizes.height - 20,
+    height: sizes.height + 60,
     justifyContent: 'space-evenly',
     alignItems: 'center',
     backgroundColor: '#efefef',
   },
   logo: {
-    marginTop: 100,
-    marginBottom: 60,
+    marginTop: 350,
+    marginBottom: 300,
     width: 80,
     height: 100,
   },
@@ -108,6 +143,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#efefef',
   },
   forms: {
+    height: 880,
     marginTop: 60,
   },
   input: {
@@ -145,9 +181,8 @@ const styles = StyleSheet.create({
   btnCadastrar: {
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     height: 20,
-    width: '50%',
   },
 });
 
