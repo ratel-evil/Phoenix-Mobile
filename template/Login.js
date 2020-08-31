@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Image,
@@ -15,56 +15,85 @@ import {
 } from 'react-native';
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 import BackgroundImage from '../assets/fundo01-01.png';
-
+import { Form } from '@unform/mobile';
+import Input from '../components/Input'
+import * as Yup from 'yup';
 function Login({ navigation }) {
-  
-  const handleSubmit = (data, {reset}) => {
+  const formRef = useRef(null);
 
+  async function handleSubmit(data, { reset }) {
+    try {
+      const schema = Yup.object().shape({
+        usuario: Yup.string().required('O usuário é obrigatório'),
+        sobrenome: Yup.string().required('O a senha é obrigatória'),
+      });
+      await schema.validate(data, {
+        abortEarly: false,
+      });
+      // Validation passed
+      console.warn(data);
+      formRef.current.setErrors({});
+      reset();
+    } catch (err) {
+      if (err instanceof Yup.ValidationError) {
+        const errorMessages = {};
+
+        err.inner.forEach((error) => {
+          errorMessages[error.path] = error.message;
+        });
+
+        formRef.current.setErrors(errorMessages);
+      }
+    }
   }
 
   return (
-    <KeyboardAvoidingView
-      behavior={Platform.OS === 'ios' ? 'padding' : null}
-      style={styles.container}>
-      <Image source={LogoPhoenix} style={styles.logo} />
-      <Form ref={formRef} onSubmit={() => console.log('oia o submit')}>
-        <Input
-          style={styles.input}
-          name="usuario"
-          type="text"
-          placeholder="Usuário"
-        />
-        <Input
-          style={styles.input}
-          name="nome"
-          type="text"
-          placeholder="Nome"
-          securityTextEntry={true}
-        />
-        {/* <TextInput
+    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
+      <KeyboardAvoidingView
+        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        style={styles.container}
+
+      >
+        <Image source={LogoPhoenix} style={styles.logo} />
+        <Form ref={formRef} style={styles.form} onSubmit={handleSubmit}>
+          <Input
+            style={styles.input}
+            name="usuario"
+            type="text"
+            placeholder="Usuário"
+          />
+          <Input
+            style={styles.input}
+            name="senha"
+            type="text"
+            placeholder="Senha"
+            securityTextEntry={true}
+          />
+          {/* <TextInput
         style={styles.input}
         placeholder={'Senha'}
         onChangeText={setPassword}
         secureTextEntry={true}
       /> */}
 
-        <View style={styles.buttons}>
-          <Button
-            color="#63b370"
-            title={'Cadastrar'}
-            onPress={() => {
-              navigation.navigate('SignUp');
-            }}
-          />
-          <Button
-            color="#63b370"
-            title={'Entrar'}
-            onPress={() => formRef.current.submitForm()}
-          />
-        </View>
-      </Form>
-      <Image source={BackgroundImage} style={styles.backImage} />
-    </KeyboardAvoidingView>
+          <View style={styles.buttons}>
+            <Button
+              color="#63b370"
+              title={'Cadastrar'}
+              onPress={() => {
+                navigation.navigate('SignUp');
+              }}
+            />
+            <Button
+              color="#63b370"
+              title={'Entrar'}
+              onPress={() => formRef.current.submitForm()}
+            />
+          </View>
+        </Form>
+        <Image source={BackgroundImage} style={styles.backImage} />
+      </KeyboardAvoidingView>
+    </TouchableWithoutFeedback>
   );
 }
 const sizes = Dimensions.get('window');
@@ -79,6 +108,11 @@ const styles = StyleSheet.create({
   logo: {
     resizeMode: 'contain',
     height: sizes.width / 2,
+  },
+  form: {
+    height: 200,
+    alignContent: 'center',
+    justifyContent: 'space-around',
   },
   input: {
     borderColor: 'grey',
@@ -101,8 +135,7 @@ const styles = StyleSheet.create({
   buttons: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'space-between',
-    width: '52%',
+    justifyContent: 'space-around',
     height: 20,
   },
   backImage: {
