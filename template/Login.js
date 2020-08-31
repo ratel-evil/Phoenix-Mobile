@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Image,
@@ -15,41 +15,54 @@ import {
 } from 'react-native';
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 import BackgroundImage from '../assets/fundo01-01.png';
-import {Form} from '@unform/mobile';
-import Input from '../components/Input';
 
-function Login({navigation}) {
-  const formRef = useRef(null);
+function Login({ navigation }) {
   
+  const handleSubmit = (data, {reset}) => {
+
+  }
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={styles.container}>
       <Image source={LogoPhoenix} style={styles.logo} />
-      
-
-      <TextInput
+      <Form ref={formRef} onSubmit={() => console.log('oia o submit')}>
+        <Input
+          style={styles.input}
+          name="usuario"
+          type="text"
+          placeholder="Usuário"
+        />
+        <Input
+          style={styles.input}
+          name="nome"
+          type="text"
+          placeholder="Nome"
+          securityTextEntry={true}
+        />
+        {/* <TextInput
         style={styles.input}
         placeholder={'Senha'}
         onChangeText={setPassword}
         secureTextEntry={true}
-      />
+      /> */}
 
-      <View style={styles.buttons}>
-        <Button
-          color="#63b370"
-          title={'Cadastrar'}
-          onPress={() => {
-            navigation.navigate('SignUp');
-          }}
-        />
-        <Button
-          color="#63b370"
-          title={'Entrar'}
-          onPress={() => console.warn('login')}
-        />
-      </View>
+        <View style={styles.buttons}>
+          <Button
+            color="#63b370"
+            title={'Cadastrar'}
+            onPress={() => {
+              navigation.navigate('SignUp');
+            }}
+          />
+          <Button
+            color="#63b370"
+            title={'Entrar'}
+            onPress={() => formRef.current.submitForm()}
+          />
+        </View>
+      </Form>
       <Image source={BackgroundImage} style={styles.backImage} />
     </KeyboardAvoidingView>
   );
