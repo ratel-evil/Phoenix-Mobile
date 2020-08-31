@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {
   View,
   Image,
@@ -15,21 +15,19 @@ import {
 } from 'react-native';
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 import BackgroundImage from '../assets/fundo01-01.png';
+import {Form} from '@unform/mobile';
+import Input from '../components/Input';
 
 function Login({navigation}) {
-  const [username, setUsername] = React.useState('');
-  const [password, setPassword] = React.useState('');
+  const formRef = useRef(null);
+  
 
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === 'ios' ? 'padding' : null}
       style={styles.container}>
       <Image source={LogoPhoenix} style={styles.logo} />
-      <TextInput
-        style={styles.input}
-        placeholder={'Usuário'}
-        onChangeText={setUsername}
-      />
+      
 
       <TextInput
         style={styles.input}
