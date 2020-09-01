@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, StyleSheet, View, Image, Dimensions } from 'react-native';
-import LogoPhoenix from '../assets/logo_phoenix/Phoenix-09.png'
+import LogoPhoenix from '../assets/logo_phoenix/Phoenix-04.png'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 Icon.loadFont();
@@ -12,7 +12,8 @@ const Header = ({ navigation }) => {
                 <Icon
                     name="dehaze"
                     size={48}
-                    backgroundColor="#fff"
+                    color="grey"
+
                 />
             </TouchableOpacity>
         </View>
@@ -32,7 +33,7 @@ const styles = StyleSheet.create({
     },
     logo: {
         width: 60,
-        height: 60
+        height: 80
     }
 
 })
