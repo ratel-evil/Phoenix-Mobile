@@ -5,7 +5,6 @@ import {
   Button,
   TextInput,
   StyleSheet,
-  KeyboardAvoidingView,
   SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
@@ -13,11 +12,15 @@ import {
   Dimensions,
   Text,
 } from 'react-native';
+import { Form } from '@unform/mobile';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import * as Yup from 'yup';
+
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 import BackgroundImage from '../assets/fundo01-01.png';
-import { Form } from '@unform/mobile';
+
 import Input from '../components/Input'
-import * as Yup from 'yup';
+
 function Login({ navigation }) {
   const formRef = useRef(null);
 
@@ -25,14 +28,16 @@ function Login({ navigation }) {
     try {
       const schema = Yup.object().shape({
         usuario: Yup.string().required('O usuário é obrigatório'),
-        sobrenome: Yup.string().required('O a senha é obrigatória'),
+        senha: Yup.string().required('O a senha é obrigatória'),
       });
       await schema.validate(data, {
         abortEarly: false,
       });
       // Validation passed
+      // set token
       console.warn(data);
       formRef.current.setErrors({});
+      navigation.navigate('Feed')
       reset();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -49,50 +54,48 @@ function Login({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
-        style={styles.container}
+      <KeyboardAwareScrollView
 
+        scrollEnabled={true}
       >
-        <Image source={LogoPhoenix} style={styles.logo} />
-        <Form ref={formRef} style={styles.form} onSubmit={handleSubmit}>
-          <Input
-            style={styles.input}
-            name="usuario"
-            type="text"
-            placeholder="Usuário"
-          />
-          <Input
-            style={styles.input}
-            name="senha"
-            type="text"
-            placeholder="Senha"
-            securityTextEntry={true}
-          />
-          {/* <TextInput
-        style={styles.input}
-        placeholder={'Senha'}
-        onChangeText={setPassword}
-        secureTextEntry={true}
-      /> */}
+        <View style={styles.container}>
+          <Image source={LogoPhoenix} style={styles.logo} />
 
-          <View style={styles.buttons}>
-            <Button
-              color="#63b370"
-              title={'Cadastrar'}
-              onPress={() => {
-                navigation.navigate('SignUp');
-              }}
+          <Form ref={formRef} style={styles.form} onSubmit={handleSubmit}>
+            <View>
+            <Input
+              style={styles.input}
+              name="usuario"
+              type="text"
+              placeholder="Usuário"
             />
-            <Button
-              color="#63b370"
-              title={'Entrar'}
-              onPress={() => formRef.current.submitForm()}
+            <Input
+              style={styles.input}
+              name="senha"
+              type="text"
+              placeholder="Senha"
+              securityTextEntry={true}
             />
           </View>
-        </Form>
-        <Image source={BackgroundImage} style={styles.backImage} />
-      </KeyboardAvoidingView>
+            <View style={styles.buttons}>
+              <Button
+                color="#63b370"
+                title={'Cadastrar'}
+                onPress={() => {
+                  navigation.navigate('SignUp');
+                }}
+              />
+              <Button
+                color="#63b370"
+                title={'Entrar'}
+                onPress={() => formRef.current.submitForm()}
+              />
+            </View>
+          </Form>
+          <Image source={BackgroundImage} style={styles.backImage} />
+          {/* <Image source={LogoPhoenix} style={styles.logo} /> */}
+        </View>
+      </KeyboardAwareScrollView>
     </TouchableWithoutFeedback>
   );
 }
@@ -100,19 +103,21 @@ const sizes = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: sizes.width,
-    height: sizes.height - 50,
-    justifyContent: 'space-evenly',
-    alignItems: 'center',
+    height: sizes.height - 50 ,
+    flex: 1,
+    alignItems: "center",
+    justifyContent: 'center',
     backgroundColor: '#efefef',
   },
   logo: {
     resizeMode: 'contain',
     height: sizes.width / 2,
+    marginTop: 20
   },
   form: {
-    height: 200,
+    flex: 1,
     alignContent: 'center',
-    justifyContent: 'space-around',
+    justifyContent: 'space-evenly',
   },
   input: {
     borderColor: 'grey',
@@ -120,6 +125,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 45,
     paddingTop: 10,
+    marginTop:20,
     borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: {
@@ -141,7 +147,7 @@ const styles = StyleSheet.create({
   backImage: {
     position: 'absolute',
     width: '200%',
-    height: 300,
+    height: 350,
     opacity: 0.2,
     bottom: 0,
     zIndex: -1,
