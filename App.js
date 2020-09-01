@@ -13,7 +13,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Login from './template/Login';
 import SignUp from './template/SignUp';
-
+import Feed from './template/Feed';
 const AuthContext = React.createContext();
 
 const Stack = createStackNavigator();
@@ -51,6 +51,11 @@ const App = () => {
             safeAreaInsets: { top: 0 }
 
           }}
+        />
+        <Stack.Screen
+          name="Feed"
+          component={Feed}
+          options={{ header = null }}
         />
       </Stack.Navigator>
     </NavigationContainer>
