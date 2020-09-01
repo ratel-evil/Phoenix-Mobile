@@ -32,7 +32,7 @@ function Login({navigation}) {
           .required('O usuário é obrigatório'),
         senha: Yup.string()
           .min(6, 'No mínimo 6 caracteres')
-          .required('O a senha é obrigatória'),
+          .required('A senha é obrigatória'),
       });
       await schema.validate(data, {
         abortEarly: false,
