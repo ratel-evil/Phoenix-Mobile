@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, StyleSheet, Text, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
+import { TouchableOpacity } from 'react-native-gesture-handler';
 Icon.loadFont()
 
 const Post = (props) => {
@@ -16,7 +17,7 @@ const Post = (props) => {
                         size={38}
                         color='grey'
                     ></Icon>
-                    <Text style={{color:'grey'}}>Image Missing</Text>
+                    <Text style={{ color: 'grey' }}>Image Missing</Text>
                 </React.Fragment>
             )
         }
@@ -42,6 +43,24 @@ const Post = (props) => {
             </View>
 
             <View style={styles.footer}>
+                <TouchableOpacity style={{marginRight: 10}}>
+                    <Icon
+                        name='heart'
+                        size={24}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity>
+                    <Icon
+                        name='comment'
+                        size={24}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity style={{marginLeft: 10}}>
+                    <Icon
+                        name='paper-plane'
+                        size={24}
+                    />
+                </TouchableOpacity>
 
             </View>
         </View>
@@ -53,12 +72,19 @@ const styles = StyleSheet.create({
         width: sizes.width - 50,
         marginLeft: 20,
         marginRight: 20,
-        marginTop: 20,
+        marginBottom: 20,
         borderRadius: 10,
         backgroundColor: '#fff',
         borderWidth: 1,
-        borderColor: '#ccc',
-        height: 310
+        borderColor: '#fff',
+        shadowColor: '#000',
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.36,
+        shadowRadius: 6.68,
+        elevation: 11,
 
 
     },
@@ -86,7 +112,15 @@ const styles = StyleSheet.create({
     },
     footer: {
         padding: 10,
-        height: 40,
+        height: 41,
+        borderBottomStartRadius: 10,
+        borderBottomEndRadius: 10,
+        backgroundColor: "white",
+        borderBottomWidth: 1,
+        borderLeftWidth: 1,
+        borderRightWidth: 1,
+        borderColor: '#fff',
+        flexDirection: 'row'
     }
 
 })
