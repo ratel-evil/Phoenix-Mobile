@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   View,
   Image,
@@ -12,23 +12,27 @@ import {
   Dimensions,
   Text,
 } from 'react-native';
-import { Form } from '@unform/mobile';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import {Form} from '@unform/mobile';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
 
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 import BackgroundImage from '../assets/fundo01-01.png';
 
-import Input from '../components/Input'
+import Input from '../components/Input';
 
-function Login({ navigation }) {
+function Login({navigation}) {
   const formRef = useRef(null);
 
-  async function handleSubmit(data, { reset }) {
+  async function handleSubmit(data, {reset}) {
     try {
       const schema = Yup.object().shape({
-        usuario: Yup.string().required('O usuário é obrigatório'),
-        senha: Yup.string().required('O a senha é obrigatória'),
+        usuario: Yup.string()
+          .min(3, 'mínimo de 3 caracteres')
+          .required('O usuário é obrigatório'),
+        senha: Yup.string()
+          .min(6, 'No mínimo 6 caracteres')
+          .required('O a senha é obrigatória'),
       });
       await schema.validate(data, {
         abortEarly: false,
@@ -38,8 +42,8 @@ function Login({ navigation }) {
       console.warn(data);
       formRef.current.setErrors({});
 
-      navigation.navigate('Main')
-      
+      navigation.navigate('Main');
+
       reset();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -56,29 +60,26 @@ function Login({ navigation }) {
 
   return (
     <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <KeyboardAwareScrollView
-
-        scrollEnabled={true}
-      >
+      <KeyboardAwareScrollView scrollEnabled={true}>
         <View style={styles.container}>
           <Image source={LogoPhoenix} style={styles.logo} />
 
           <Form ref={formRef} style={styles.form} onSubmit={handleSubmit}>
             <View>
-            <Input
-              style={styles.input}
-              name="usuario"
-              type="text"
-              placeholder="Usuário"
-            />
-            <Input
-              style={styles.input}
-              name="senha"
-              type="text"
-              placeholder="Senha"
-              secureTextEntry={true}
-            />
-          </View>
+              <Input
+                style={styles.input}
+                name="usuario"
+                type="text"
+                placeholder="Usuário"
+              />
+              <Input
+                style={styles.input}
+                name="senha"
+                type="text"
+                placeholder="Senha"
+                secureTextEntry={true}
+              />
+            </View>
             <View style={styles.buttons}>
               <Button
                 color="#63b370"
@@ -105,16 +106,16 @@ const sizes = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
     width: sizes.width,
-    height: sizes.height - 50 ,
+    height: sizes.height - 50,
     flex: 1,
-    alignItems: "center",
+    alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#efefef',
   },
   logo: {
     resizeMode: 'contain',
     height: sizes.width / 2,
-    marginTop: 20
+    marginTop: 20,
   },
   form: {
     flex: 1,
@@ -127,7 +128,7 @@ const styles = StyleSheet.create({
     width: 300,
     height: 45,
     paddingTop: 10,
-    marginTop:20,
+    marginTop: 20,
     borderRadius: 5,
     shadowColor: '#000',
     shadowOffset: {

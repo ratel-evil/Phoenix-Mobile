@@ -25,7 +25,9 @@ const SignUp = ({navigation}) => {
   async function handleSubmit(data, {reset}) {
     try {
       const schema = Yup.object().shape({
-        nome: Yup.string().required('O nome é obrigatório'),
+        nome: Yup.string()
+          .min(3, 'mínimo de 3 caracteres')
+          .required('O nome é obrigatório'),
         sobrenome: Yup.string().required('O sobrenome é obrigatório'),
         email: Yup.string()
           .email('Digite um e-mail válido')
