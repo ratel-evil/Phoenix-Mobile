@@ -35,7 +35,7 @@ const Feed = ({ navigation }) => {
             <Header navigation={navigation} title={'Feed'}></Header>
             <View style={styles.points}>
                 <Text style={styles.textPoints}>10.000 - pts </Text>
-                <Button title='Resgatar' color="#63b370" style={styles.resgatarBtn} onPress={console.warn('em desenvolvimento')}></Button>
+                <Button title='Resgatar' color="#63b370" style={styles.resgatarBtn} onPress={() => console.warn('em desenvolvimento')}></Button>
             </View>
             <View style={{flex:1, marginTop: 10}}>
                 <FlatList

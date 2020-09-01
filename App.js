@@ -41,7 +41,7 @@ const App = () => {
           name="SignUp"
           component={SignUp}
           options={{
-            title: 'SignUp',
+            title: 'Cadastro',
             headerStyle: {
               backgroundColor: "#63b370",
               height: 50,
