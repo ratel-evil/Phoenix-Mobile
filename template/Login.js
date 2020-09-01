@@ -37,7 +37,9 @@ function Login({ navigation }) {
       // set token
       console.warn(data);
       formRef.current.setErrors({});
-      navigation.navigate('Feed')
+
+      navigation.navigate('Main')
+      
       reset();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -74,7 +76,7 @@ function Login({ navigation }) {
               name="senha"
               type="text"
               placeholder="Senha"
-              securityTextEntry={true}
+              secureTextEntry={true}
             />
           </View>
             <View style={styles.buttons}>
