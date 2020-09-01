@@ -28,7 +28,7 @@ function Login({navigation}) {
     try {
       const schema = Yup.object().shape({
         usuario: Yup.string()
-          .min(3, 'mínimo de 3 caracteres')
+          .min(3, 'No mínimo de 3 caracteres')
           .required('O usuário é obrigatório'),
         senha: Yup.string()
           .min(6, 'No mínimo 6 caracteres')
