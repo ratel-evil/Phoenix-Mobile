@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {
   View,
   Image,
@@ -7,13 +7,14 @@ import {
   StyleSheet,
   SafeAreaView,
   TouchableWithoutFeedback,
+  KeyboardAvoidingView,
   Keyboard,
   Platform,
   Dimensions,
   Text,
 } from 'react-native';
-import {Form} from '@unform/mobile';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import { Form } from '@unform/mobile';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import * as Yup from 'yup';
 
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
@@ -21,10 +22,9 @@ import BackgroundImage from '../assets/fundo01-01.png';
 
 import Input from '../components/Input';
 
-function Login({navigation}) {
+function Login({ navigation }) {
   const formRef = useRef(null);
-
-  async function handleSubmit(data, {reset}) {
+  async function handleSubmit(data, { reset }) {
     try {
       const schema = Yup.object().shape({
         usuario: Yup.string()
@@ -41,9 +41,7 @@ function Login({navigation}) {
       // set token
       console.warn(data);
       formRef.current.setErrors({});
-
       navigation.navigate('Main');
-
       reset();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -59,101 +57,84 @@ function Login({navigation}) {
   }
 
   return (
-    <TouchableWithoutFeedback onPress={() => Keyboard.dismiss()}>
-      <KeyboardAwareScrollView scrollEnabled={true}>
+
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? 'padding' : 'height'}
+      style={{ flex: 1 }}
+    >
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={styles.container}>
           <Image source={LogoPhoenix} style={styles.logo} />
 
           <Form ref={formRef} style={styles.form} onSubmit={handleSubmit}>
-            <View>
+            <View style={styles.groupInputs}>
               <Input
-                style={styles.input}
                 name="usuario"
+                title="Usuário"
                 type="text"
-                placeholder="Usuário"
               />
               <Input
-                style={styles.input}
+                title="Senha"
                 name="senha"
                 type="text"
-                placeholder="Senha"
+                label="Senha"
                 secureTextEntry={true}
               />
             </View>
             <View style={styles.buttons}>
               <Button
                 color="#63b370"
-                title={'Cadastrar'}
-                onPress={() => {
-                  navigation.navigate('SignUp');
-                }}
-              />
-              <Button
-                color="#63b370"
                 title={'Entrar'}
                 onPress={() => formRef.current.submitForm()}
               />
+
+              <View style={{ flexDirection: "row", justifyContent: "space-evenly", paddingHorizontal: 28, marginTop: 10 }}>
+                <Text style={{}}>Não tem um usuário?</Text>
+                <TouchableWithoutFeedback onPress={() => {
+                  navigation.navigate('SignUp')
+                }}>
+                  <Text style={{ textAlign: "center", textDecorationLine: "underline" }}>Crie um aqui!</Text>
+                </TouchableWithoutFeedback>
+              </View>
             </View>
           </Form>
-          <Image source={BackgroundImage} style={styles.backImage} />
-          {/* <Image source={LogoPhoenix} style={styles.logo} /> */}
+
         </View>
-      </KeyboardAwareScrollView>
-    </TouchableWithoutFeedback>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView >
   );
 }
-const sizes = Dimensions.get('window');
+const sizes = Dimensions.get('screen');
 const styles = StyleSheet.create({
   container: {
-    width: sizes.width,
-    height: sizes.height - 50,
     flex: 1,
     alignItems: 'center',
-    justifyContent: 'center',
+    //justifyContent: 'center',
     backgroundColor: '#efefef',
   },
   logo: {
     resizeMode: 'contain',
-    height: sizes.width / 2,
-    marginTop: 20,
+    height: sizes.height / 3,
+    width: sizes.width / 3,
   },
   form: {
-    flex: 1,
-    alignContent: 'center',
+    // width:sizes.width,
+    // height:sizes.height / 2,
+
     justifyContent: 'space-evenly',
   },
-  input: {
-    borderColor: 'grey',
-    borderWidth: 1,
-    width: 300,
-    height: 45,
-    paddingTop: 10,
-    marginTop: 20,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
-    backgroundColor: '#fff',
+  groupInputs: {
+    paddingRight: 10,
+    paddingLeft: 10,
   },
 
   buttons: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-around',
-    height: 20,
-  },
-  backImage: {
-    position: 'absolute',
-    width: '200%',
-    height: 350,
-    opacity: 0.2,
-    bottom: 0,
-    zIndex: -1,
+    flexDirection: 'column',
+    width: sizes.width,
+    marginTop: 50,
+    paddingLeft: 50,
+    paddingRight: 50,
+    // height: 20,
   },
 });
 

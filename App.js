@@ -15,6 +15,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import Login from './template/Login';
 import SignUp from './template/SignUp';
 import Main from './template/Main';
+import { Header } from 'react-native/Libraries/NewAppScreen';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -25,17 +26,11 @@ const App = () => {
         <Stack.Screen
           name="Login"
           component={Login}
-          options={{
-            title: 'Login',
-            headerStyle: {
-              backgroundColor: "#63b370",
-              height: 50,
-
-            },
-            headerTintColor: '#fff',
-            safeAreaInsets: { top: 0 }
-
-          }}
+          options= {{
+            headerShown:false
+          }
+          }
+          
         />
         <Stack.Screen
           name="SignUp"
@@ -45,11 +40,9 @@ const App = () => {
             headerStyle: {
               backgroundColor: "#63b370",
               height: 50,
-
             },
             headerTintColor: '#fff',
-            safeAreaInsets: { top: 0 }
-
+            
           }}
         />
         <Stack.Screen

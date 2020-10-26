@@ -3,12 +3,12 @@ import DatePicker from 'react-native-datepicker';
 
 import {StyleSheet} from 'react-native';
 
-const Date = () => {
-  const [selectedDate, setSelectedDate] = useState(null);
+const Date = ({selectedDate,setSelectedDate}) => {
+  
 
   return (
     <DatePicker
-      name="dataNascimento"
+      name="DataNascimento"
       format="DD/MM/YYYY"
       style={styles.selectedDate}
       date={selectedDate}

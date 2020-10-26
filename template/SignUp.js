@@ -18,31 +18,40 @@ import Date from '../components/Date';
 import RadioButton from '../components/radioButton';
 
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
-
+import {url} from '../global'
 const SignUp = ({navigation}) => {
   const formRef = useRef(null);
-
+  const [radioButtonSelected, setRadioButtonSelected] = useState(0);
+  const [selectedDate, setSelectedDate] = useState(null);
   async function handleSubmit(data, {reset}) {
     try {
       const schema = Yup.object().shape({
-        nome: Yup.string()
+        Nome: Yup.string()
           .min(3, 'mínimo de 3 caracteres')
           .required('O nome é obrigatório'),
-        sobrenome: Yup.string().required('O sobrenome é obrigatório'),
-        email: Yup.string()
+        Sobrenome: Yup.string().required('O sobrenome é obrigatório'),
+        Email: Yup.string()
           .email('Digite um e-mail válido')
           .required('O e-mail é obrigatório'),
-        password: Yup.string()
+        Senha: Yup.string()
           .min(6, 'No mínimo 6 caracteres')
           .required('Senha é obrigatória'),
-        confirmPassword: Yup.string()
+        ConfirmeSenha: Yup.string()
           .min(6, 'No mínimo 6 caracteres')
           .required('Sua confirmação de senha deve ser igual a senha'),
       });
       await schema.validate(data, {
         abortEarly: false,
       });
-      // Validation passed
+      delete data.confirmPassword
+      data.DesejoDoacaoOrgao = radioButtonSelected == 1 ? true : false 
+      fetch(`${url}/usuario`, {
+        body: data,
+        method: "POST",
+      }).then(response => {
+        console.log(response)
+      })
+
       console.warn(data);
       formRef.current.setErrors({});
       reset();
@@ -60,54 +69,53 @@ const SignUp = ({navigation}) => {
   }
 
   return (
-    <ScrollView>
+    <ScrollView >
       <KeyboardAvoidingView
-        behavior={Platform.OS === 'ios' ? 'padding' : null}
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
-        <Image source={LogoPhoenix} style={styles.logo} />
+        {/* <Image source={LogoPhoenix} style={styles.logo} /> */}
         <Form style={styles.forms} ref={formRef} onSubmit={handleSubmit}>
-          <View style={styles.inputContainer}>
             <Input
-              style={styles.input}
-              name="nome"
+              name="Nome"
               type="text"
-              placeholder="Nome"
+              title="Nome"
             />
             <Input
-              style={styles.input}
               name="sobrenome"
               type="text"
-              placeholder="Sobrenome"
+              title="Sobrenome"
             />
             <Input
-              style={styles.input}
-              name="email"
+              name="Email"
               type="email"
-              placeholder="Email"
+              title="Email"
             />
             <Input
-              style={styles.input}
-              name="password"
+              name="Senha"
               type="password"
-              placeholder="Senha"
+              title="Senha"
+              secureTextEntry={true}
             />
             <Input
-              style={styles.input}
-              name="confirmPassword"
+              
+              name="ConfirmSenha"
               type="password"
-              placeholder="Confirmar Senha"
+              title="Confirmar Senha"
+              secureTextEntry={true}
             />
-          </View>
 
           <View style={styles.selectDateContainer}>
             <Text>Data de nasc: </Text>
-            <Date />
+            <Date 
+              setSelectedDate={setSelectedDate}
+              selectedDate={selectedDate}/>
           </View>
 
           <Text>Você tem vontade de ser um doador de órgãos?</Text>
 
           <View style={styles.radioButtons}>
-            <RadioButton />
+            <RadioButton 
+              setRadioButtonSelected={setRadioButtonSelected}/>
           </View>
 
           <View style={styles.btnCadastrar}>
@@ -127,15 +135,13 @@ const SignUp = ({navigation}) => {
 const sizes = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    width: sizes.width,
-    height: sizes.height + 60,
-    justifyContent: 'space-evenly',
+    flex:1,
+    height:sizes.height,
+    justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#efefef',
   },
   logo: {
-    marginTop: 350,
-    marginBottom: 300,
     width: 80,
     height: 100,
   },
@@ -145,26 +151,9 @@ const styles = StyleSheet.create({
     backgroundColor: '#efefef',
   },
   forms: {
-    height: 880,
-    marginTop: 60,
-  },
-  input: {
-    borderColor: 'grey',
-    borderWidth: 1,
-    marginBottom: 10,
-    width: 300,
-    height: 45,
-    paddingTop: 10,
-    borderRadius: 5,
-    shadowColor: '#000',
-    shadowOffset: {
-      width: 0,
-      height: 5,
-    },
-    shadowOpacity: 0.36,
-    shadowRadius: 6.68,
-    elevation: 11,
-    backgroundColor: '#fff',
+    flex:1,
+    width:sizes.width,
+    paddingHorizontal: 24,
   },
   selectDateContainer: {
     flexDirection: 'row',
@@ -182,7 +171,8 @@ const styles = StyleSheet.create({
 
   btnCadastrar: {
     flex: 1,
-    alignItems: 'center',
+    width:sizes.width,
+    paddingRight: 48,
     justifyContent: 'flex-start',
     height: 20,
   },

@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
 import RadioForm from 'react-native-simple-radio-button';
 
-const SelectedRadioButton = ({name, selectedButtonColor, buttonColor}) => {
+const SelectedRadioButton = ({name, selectedButtonColor, buttonColor,radioButtonSelected, setRadioButtonSelected}) => {
   const radio_props = [
-    {label: 'sim     ', value: 0},
+    {label: 'sim       ', value: 0},
     {label: 'não', value: 1},
   ];
 
-  const [radioButtonSelected, setRadioButtonSelected] = useState(0);
+  
   return (
     <RadioForm
       name={ name || "selectRadio" }
