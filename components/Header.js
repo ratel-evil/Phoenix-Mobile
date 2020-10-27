@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button, StyleSheet, View, Image, Dimensions } from 'react-native';
-import LogoPhoenix from '../assets/logo_phoenix/Phoenix-04.png'
+import LogoPhoenix from '../assets/logo_phoenix/Phoenix-17.png'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { TouchableOpacity } from 'react-native-gesture-handler';
 Icon.loadFont();
@@ -23,17 +23,17 @@ const Header = ({ navigation }) => {
 const sizes = Dimensions.get('screen');
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
+        flexDirection: 'row-reverse',
         alignItems: 'center',
         justifyContent: "space-between",
-        paddingTop: 20,
-        paddingBottom: 20,
-        paddingLeft: 30,
-        paddingRight: 30
+        paddingTop: 10,
+        paddingBottom: 15,
+        paddingLeft: 10,
+        paddingRight: 10
     },
     logo: {
-        width: 60,
-        height: 80
+        width: 48,
+        height: 48
     }
 
 })

@@ -14,7 +14,7 @@ const Main = ({ route, navigation }) => {
     const {setIsAuth, getUserData} = route.params
     return (
         <Drawer.Navigator 
-            drawerContent={({navigation: drawerNavigation}) => <SideMenu drawerNavigation={drawerNavigation} navigation={navigation}></SideMenu>}
+            drawerContent={({navigation: drawerNavigation}) => <SideMenu getUserData={getUserData} drawerNavigation={drawerNavigation} navigation={navigation}></SideMenu>}
             drawerStyle={{
                 marginTop:100
             }}

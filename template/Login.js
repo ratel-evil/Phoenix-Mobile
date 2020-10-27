@@ -12,6 +12,7 @@ import {
   Platform,
   Dimensions,
   Text,
+  Alert
 } from 'react-native';
 import { Form } from '@unform/mobile';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
@@ -48,9 +49,25 @@ function Login({ route,navigation }) {
         body: JSON.stringify(data),
         headers: new Headers({"Content-Type": "application/json"})
       })
+      if(response.ok){
+        setUserData(await response.json())
+      }else{
+        Alert.alert(
+          "Login",
+          "Email ou Senha inválidos",
+          [
+            {
+              text:"Criar Conta",
+              onPress: () => navigation.navigate('SignUp')
+            },
+            {
+              text: "Voltar"
+            }
+          ]
+
+        )
+      }
       formRef.current.setErrors({});
-      reset();
-      setUserData(await response.json())
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errorMessages = {};
