@@ -1,4 +1,4 @@
-import React, {useRef} from 'react';
+import React, {useState, useRef} from 'react';
 import * as Yup from 'yup';
 import {
   Button,
@@ -18,7 +18,7 @@ import Date from '../components/Date';
 import RadioButton from '../components/radioButton';
 
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
-import {url} from '../global'
+import {url} from '../global';
 const SignUp = ({navigation}) => {
   const formRef = useRef(null);
   const [radioButtonSelected, setRadioButtonSelected] = useState(0);
@@ -43,17 +43,26 @@ const SignUp = ({navigation}) => {
       await schema.validate(data, {
         abortEarly: false,
       });
-      delete data.confirmPassword
-      data.DesejoDoacaoOrgao = radioButtonSelected == 1 ? true : false 
+      delete data.confirmPassword;
+      data.DesejoDoacaoOrgao = radioButtonSelected == 1 ? true : false;
       fetch(`${url}/usuario`, {
-        body: data,
-        method: "POST",
-      }).then(response => {
-        console.log(response)
-      })
+        method: 'POST',
+        body: JSON.stringify({
+          Nome: this.Nome,
+          Sobrenome: this.Sobrenome,
+          Email: this.email,
+          Senha: this.Senha,
+          ConfirmSenha: this.ConfirmSenha,
+        }),
+        headers: new Headers({
+          contentType: 'application/problem+json; charset=utf-8',
+        }),
+      }).then((response) => {
+        if (response === 200) {
+          console.warn('Cadastrado com sucesso');
+        }
+      });
 
-      console.warn(data);
-      formRef.current.setErrors({});
       reset();
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
@@ -69,53 +78,40 @@ const SignUp = ({navigation}) => {
   }
 
   return (
-    <ScrollView >
+    <ScrollView>
       <KeyboardAvoidingView
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         style={styles.container}>
         {/* <Image source={LogoPhoenix} style={styles.logo} /> */}
         <Form style={styles.forms} ref={formRef} onSubmit={handleSubmit}>
-            <Input
-              name="Nome"
-              type="text"
-              title="Nome"
-            />
-            <Input
-              name="sobrenome"
-              type="text"
-              title="Sobrenome"
-            />
-            <Input
-              name="Email"
-              type="email"
-              title="Email"
-            />
-            <Input
-              name="Senha"
-              type="password"
-              title="Senha"
-              secureTextEntry={true}
-            />
-            <Input
-              
-              name="ConfirmSenha"
-              type="password"
-              title="Confirmar Senha"
-              secureTextEntry={true}
-            />
+          <Input name="Nome" type="text" title="Nome" />
+          <Input name="sobrenome" type="text" title="Sobrenome" />
+          <Input name="Email" type="email" title="Email" />
+          <Input
+            name="Senha"
+            type="password"
+            title="Senha"
+            secureTextEntry={true}
+          />
+          <Input
+            name="ConfirmSenha"
+            type="password"
+            title="Confirmar Senha"
+            secureTextEntry={true}
+          />
 
           <View style={styles.selectDateContainer}>
             <Text>Data de nasc: </Text>
-            <Date 
+            <Date
               setSelectedDate={setSelectedDate}
-              selectedDate={selectedDate}/>
+              selectedDate={selectedDate}
+            />
           </View>
 
           <Text>Você tem vontade de ser um doador de órgãos?</Text>
 
           <View style={styles.radioButtons}>
-            <RadioButton 
-              setRadioButtonSelected={setRadioButtonSelected}/>
+            <RadioButton setRadioButtonSelected={setRadioButtonSelected} />
           </View>
 
           <View style={styles.btnCadastrar}>
@@ -123,7 +119,7 @@ const SignUp = ({navigation}) => {
               style={styles.buttons}
               color="#63b370"
               title="Cadastrar"
-              onPress={() => formRef.current.submitForm()}
+              onPress={() => handleSubmit()}
             />
           </View>
         </Form>
@@ -135,8 +131,8 @@ const SignUp = ({navigation}) => {
 const sizes = Dimensions.get('window');
 const styles = StyleSheet.create({
   container: {
-    flex:1,
-    height:sizes.height,
+    flex: 1,
+    height: sizes.height,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#efefef',
@@ -151,8 +147,8 @@ const styles = StyleSheet.create({
     backgroundColor: '#efefef',
   },
   forms: {
-    flex:1,
-    width:sizes.width,
+    flex: 1,
+    width: sizes.width,
     paddingHorizontal: 24,
   },
   selectDateContainer: {
@@ -171,7 +167,7 @@ const styles = StyleSheet.create({
 
   btnCadastrar: {
     flex: 1,
-    width:sizes.width,
+    width: sizes.width,
     paddingRight: 48,
     justifyContent: 'flex-start',
     height: 20,

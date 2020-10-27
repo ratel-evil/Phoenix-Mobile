@@ -5686,6 +5686,11 @@ react-native-datepicker@^1.7.2:
   dependencies:
     moment "^2.22.0"
 
+react-native-floating-label-input@^1.2.8:
+  version "1.2.8"
+  resolved "https://registry.yarnpkg.com/react-native-floating-label-input/-/react-native-floating-label-input-1.2.8.tgz#32ccb4804b4f14d479ae5843bbde2451dab554c8"
+  integrity sha512-L0KldNcU5gySilYdt/SmtWjSaoeRPNh7sXbyfADKZgi7iwCwgZQt57qNxcMUKwBiivi9WJYSkXTd/g0WkbBXzw==
+
 react-native-gesture-handler@^1.7.0:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-1.7.0.tgz#0ef74a5ba836832e497dc49eb1ce58baa6c617e5"
