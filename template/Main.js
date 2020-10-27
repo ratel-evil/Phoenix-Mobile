@@ -10,7 +10,8 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 const Drawer = createDrawerNavigator()
 
 
-const Main = ({ navigation }) => {
+const Main = ({ route, navigation }) => {
+    const {setIsAuth, getUserData} = route.params
     return (
         <Drawer.Navigator 
             drawerContent={({navigation: drawerNavigation}) => <SideMenu drawerNavigation={drawerNavigation} navigation={navigation}></SideMenu>}
@@ -20,6 +21,7 @@ const Main = ({ navigation }) => {
             >
             <Drawer.Screen
                 name="Feed"
+                initialParams={{setIsAuth, getUserData}}
                 options={
                     { drawerLabel: "Feed", }
                 }

@@ -5,14 +5,27 @@ import Header from '../components/Header'
 import { FlatList } from 'react-native-gesture-handler';
 import Post from '../components/Post'
 import { SafeAreaView } from 'react-native-safe-area-context';
-
-const Feed = ({ navigation }) => {
+import {api} from '../global'
+const Feed = ({ route, navigation }) => {
     const [data, setData] = useState({ data: [] });
-
+    const { _setIsAuth, getUserData } = route.params
     useEffect(() => {
-        fetch('https://api-phoenix.azurewebsites.net/api/feed')
-            .then((response) => response.json())
-            .then((json) => setData(json))
+        async function getData() {
+            const {token} = await getUserData();
+            if(!token) setIsAuth(false);
+            const response = await fetch(`${api}/feed`,
+                {
+                    method:"GET",
+                    headers: {
+                        "Authorization" : `Bearer ${token}`,
+                        "Accept": 'application/json',
+                        "Contet-Type": "application/json"
+                    }
+                }
+            )
+            console.log(response.json())
+        }
+        getData();
     }, []);
 
 
@@ -37,7 +50,7 @@ const Feed = ({ navigation }) => {
                 <Text style={styles.textPoints}>10.000 - pts </Text>
                 <Button title='Resgatar' color="#63b370" style={styles.resgatarBtn} onPress={() => console.warn('em desenvolvimento')}></Button>
             </View>
-            <View style={{flex:1, marginTop: 10}}>
+            <View style={{ flex: 1, marginTop: 10 }}>
                 <FlatList
                     data={data}
                     renderItem={renderItem}

@@ -21,28 +21,36 @@ import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
 import BackgroundImage from '../assets/fundo01-01.png';
 
 import Input from '../components/Input';
-
-function Login({ navigation }) {
+import  { api }  from '../global';
+import { DrawerContentScrollView } from '@react-navigation/drawer';
+import { Header } from 'react-native/Libraries/NewAppScreen';
+function Login({ route,navigation }) {
+  const {setUserData} = route.params;
   const formRef = useRef(null);
+  
   async function handleSubmit(data, { reset }) {
     try {
       const schema = Yup.object().shape({
-        usuario: Yup.string()
-          .min(3, 'No mínimo de 3 caracteres')
-          .required('O usuário é obrigatório'),
-        senha: Yup.string()
+        Email: Yup.string()
+          .email("Insira um e-mail válido")
+          .required("o e-mail é obrigatório"),
+        Senha: Yup.string()
           .min(6, 'No mínimo 6 caracteres')
           .required('A senha é obrigatória'),
       });
+      console.log(data)
       await schema.validate(data, {
         abortEarly: false,
       });
-      // Validation passed
-      // set token
-      console.warn(data);
+      console.log(api+'/usuario/login');
+      const response = await fetch(`${api}/usuario/login` ,{
+        method: 'post',
+        body: JSON.stringify(data),
+        headers: new Headers({"Content-Type": "application/json"})
+      })
       formRef.current.setErrors({});
-      navigation.navigate('Main');
       reset();
+      setUserData(await response.json())
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errorMessages = {};
@@ -50,7 +58,7 @@ function Login({ navigation }) {
         err.inner.forEach((error) => {
           errorMessages[error.path] = error.message;
         });
-
+        console.log( "DEu ruim")
         formRef.current.setErrors(errorMessages);
       }
     }
@@ -69,13 +77,13 @@ function Login({ navigation }) {
           <Form ref={formRef} style={styles.form} onSubmit={handleSubmit}>
             <View style={styles.groupInputs}>
               <Input
-                name="usuario"
-                title="Usuário"
+                name="Email"
+                title="Email"
                 type="text"
               />
               <Input
                 title="Senha"
-                name="senha"
+                name="Senha"
                 type="text"
                 label="Senha"
                 secureTextEntry={true}
@@ -87,7 +95,8 @@ function Login({ navigation }) {
                 title={'Entrar'}
                 onPress={() => formRef.current.submitForm()}
               />
-
+              </View>
+              </Form>
               <View style={{ flexDirection: "row", justifyContent: "space-evenly", paddingHorizontal: 28, marginTop: 10 }}>
                 <Text style={{}}>Não tem um usuário?</Text>
                 <TouchableWithoutFeedback onPress={() => {
@@ -96,8 +105,8 @@ function Login({ navigation }) {
                   <Text style={{ textAlign: "center", textDecorationLine: "underline" }}>Crie um aqui!</Text>
                 </TouchableWithoutFeedback>
               </View>
-            </View>
-          </Form>
+            
+          
 
         </View>
       </TouchableWithoutFeedback>
@@ -126,12 +135,13 @@ const styles = StyleSheet.create({
   groupInputs: {
     paddingRight: 10,
     paddingLeft: 10,
+    marginTop: 20,
   },
 
   buttons: {
     flexDirection: 'column',
     width: sizes.width,
-    marginTop: 50,
+    marginTop: 60,
     paddingLeft: 50,
     paddingRight: 50,
     // height: 20,
