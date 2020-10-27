@@ -6,8 +6,9 @@ Icon.loadFont();
 
 
 
-const SideMenu = ({ navigation, drawerNavigation }) => {
-
+const SideMenu = async ({ navigation, drawerNavigation, getUserData }) => {
+    const { usuario } = await getUserData();
+    console.log(usuario)
     const NavLink = ({ name, size, text, onPress }) =>
         <TouchableOpacity onPress={() => onPress()}>
             <View
@@ -30,7 +31,7 @@ const SideMenu = ({ navigation, drawerNavigation }) => {
         <View style={styles.container}>
             <View style={styles.panel}>
                 <View style={styles.avatar}></View>
-                <Text style={styles.email}>meuEmail@mock.com</Text>
+                <Text style={styles.email}>Bem vindo {usuario.nome}</Text>
             </View>
             <ScrollView>
                 <NavLink
@@ -104,7 +105,7 @@ const styles = StyleSheet.create({
         flexDirection: "row"
     },
     navLinkText: {
-
+        fontSize: 18
     },
     iconArea: {
 

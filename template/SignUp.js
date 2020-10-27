@@ -40,28 +40,26 @@ const SignUp = ({navigation}) => {
           .min(6, 'No mínimo 6 caracteres')
           .required('Sua confirmação de senha deve ser igual a senha'),
       });
+      console.log(selectedDate)
       await schema.validate(data, {
         abortEarly: false,
       });
       delete data.confirmPassword;
-      data.DesejoDoacaoOrgao = radioButtonSelected == 1 ? true : false;
-      fetch(`${url}/usuario`, {
-        method: 'POST',
-        body: JSON.stringify({
-          Nome: this.Nome,
-          Sobrenome: this.Sobrenome,
-          Email: this.email,
-          Senha: this.Senha,
-          ConfirmSenha: this.ConfirmSenha,
-        }),
-        headers: new Headers({
-          contentType: 'application/problem+json; charset=utf-8',
-        }),
-      }).then((response) => {
-        if (response === 200) {
-          console.warn('Cadastrado com sucesso');
-        }
-      });
+      
+      // const response = await fetch(`${url}/usuario`, {
+      //   method: 'POST',
+      //   body: JSON.stringify({
+      //     Nome: data.Nome,
+      //     Sobrenome: data.Sobrenome,
+      //     Email: data.email,
+      //     Senha: data.Senha,
+      //     DesejoDoacaoOrgao :  radioButtonSelected == 1 ? true : false,
+      //     Data: selectedDate
+      //   }),
+      //   headers: new Headers({
+      //     "Content-Type": 'application/json; charset=utf-8',
+      //   }),
+      // })
 
       reset();
     } catch (err) {
@@ -119,7 +117,7 @@ const SignUp = ({navigation}) => {
               style={styles.buttons}
               color="#63b370"
               title="Cadastrar"
-              onPress={() => handleSubmit()}
+              onPress={handleSubmit}
             />
           </View>
         </Form>
