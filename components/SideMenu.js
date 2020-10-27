@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect,useState } from 'react';
 import { ScrollView, View, Text, StyleSheet, Dimensions } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome'
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -6,8 +6,19 @@ Icon.loadFont();
 
 
 
-const SideMenu = async ({ navigation, drawerNavigation, getUserData }) => {
-    const { usuario } = await getUserData();
+const SideMenu =({ navigation, drawerNavigation, getUserData, setIsAuth, setUserData }) => {
+    const [usuario, setUsuario] = useState(null);
+
+    useEffect(
+        () =>{
+            async function getUsuario(){
+                const userData = await getUserData();
+                setUsuario(userData.usuario)
+            }
+            getUsuario();
+        }
+        ,[])
+
     console.log(usuario)
     const NavLink = ({ name, size, text, onPress }) =>
         <TouchableOpacity onPress={() => onPress()}>
@@ -31,7 +42,7 @@ const SideMenu = async ({ navigation, drawerNavigation, getUserData }) => {
         <View style={styles.container}>
             <View style={styles.panel}>
                 <View style={styles.avatar}></View>
-                <Text style={styles.email}>Bem vindo {usuario.nome}</Text>
+                <Text style={styles.email}>Bem vindo {usuario?.nome}</Text>
             </View>
             <ScrollView>
                 <NavLink
@@ -62,7 +73,10 @@ const SideMenu = async ({ navigation, drawerNavigation, getUserData }) => {
                     name={'sign-out'}
                     size={36}
                     text="Logout"
-                    onPress={() => navigation.navigate('Login')}
+                    onPress={() => {
+                        setUserData("")
+                        setIsAuth(false)
+                    }}
                 />
                 {/* <Text onPress={() => navigation.navigate('Login')}>Logout</Text> */}
             </ScrollView>

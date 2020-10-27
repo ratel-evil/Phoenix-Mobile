@@ -1,6 +1,5 @@
 import React, {useState} from 'react';
-import DatePicker from 'react-native-datepicker';
-
+import DatePicker from 'react-native-datepicker'
 import {StyleSheet} from 'react-native';
 
 const Date = ({selectedDate,setSelectedDate}) => {

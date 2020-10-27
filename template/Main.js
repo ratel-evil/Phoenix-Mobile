@@ -11,10 +11,16 @@ const Drawer = createDrawerNavigator()
 
 
 const Main = ({ route, navigation }) => {
-    const {setIsAuth, getUserData} = route.params
+    const {setIsAuth, getUserData,setUserData} = route.params
     return (
         <Drawer.Navigator 
-            drawerContent={({navigation: drawerNavigation}) => <SideMenu getUserData={getUserData} drawerNavigation={drawerNavigation} navigation={navigation}></SideMenu>}
+            drawerContent={({navigation: drawerNavigation}) => 
+                <SideMenu 
+                    setIsAuth={setIsAuth} 
+                    getUserData={getUserData} 
+                    setUserData={setUserData}
+                    drawerNavigation={drawerNavigation} 
+                    navigation={navigation}></SideMenu>}
             drawerStyle={{
                 marginTop:100
             }}

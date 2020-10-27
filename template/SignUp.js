@@ -1,6 +1,7 @@
-import React, {useState, useRef} from 'react';
+import React, { useState, useRef } from 'react';
 import * as Yup from 'yup';
 import {
+  Alert,
   Button,
   Dimensions,
   Image,
@@ -11,19 +12,19 @@ import {
   Text,
   View,
 } from 'react-native';
-import {Form} from '@unform/mobile';
+import { Form } from '@unform/mobile';
 
 import Input from '../components/Input';
 import Date from '../components/Date';
 import RadioButton from '../components/radioButton';
 
 import LogoPhoenix from '../assets/logo_phoenix/Phoenix-03.png';
-import {url} from '../global';
-const SignUp = ({navigation}) => {
+import { api } from '../global';
+const SignUp = ({ navigation }) => {
   const formRef = useRef(null);
   const [radioButtonSelected, setRadioButtonSelected] = useState(0);
   const [selectedDate, setSelectedDate] = useState(null);
-  async function handleSubmit(data, {reset}) {
+  async function handleSubmit(data, { reset }) {
     try {
       const schema = Yup.object().shape({
         Nome: Yup.string()
@@ -37,31 +38,57 @@ const SignUp = ({navigation}) => {
           .min(6, 'No mínimo 6 caracteres')
           .required('Senha é obrigatória'),
         ConfirmeSenha: Yup.string()
-          .min(6, 'No mínimo 6 caracteres')
-          .required('Sua confirmação de senha deve ser igual a senha'),
+          .min(6, 'No mínimo 6 caracteres').oneOf([Yup.ref('Senha'), null], "As senhas devem conferir"),
       });
-      console.log(selectedDate)
+
+
       await schema.validate(data, {
         abortEarly: false,
       });
-      delete data.confirmPassword;
       
-      // const response = await fetch(`${url}/usuario`, {
-      //   method: 'POST',
-      //   body: JSON.stringify({
-      //     Nome: data.Nome,
-      //     Sobrenome: data.Sobrenome,
-      //     Email: data.email,
-      //     Senha: data.Senha,
-      //     DesejoDoacaoOrgao :  radioButtonSelected == 1 ? true : false,
-      //     Data: selectedDate
-      //   }),
-      //   headers: new Headers({
-      //     "Content-Type": 'application/json; charset=utf-8',
-      //   }),
-      // })
+      let birthDate = selectedDate.split('/');
+      birthDate = `${birthDate[2]}-${birthDate[0]}-${birthDate[1]}`
 
-      reset();
+      const body = JSON.stringify({
+        Nome: `${data.Nome} ${data.Sobrenome} `,
+        Email: data.Email,
+        Senha: data.Senha,
+        DesejoDoacaoOrgao: radioButtonSelected == 1 ? true : false,
+        Data: birthDate
+      })
+      console.log(body)
+      const response = await fetch(`${api}/usuario`, {
+        method: 'POST',
+        body,
+        headers: new Headers({
+          "Content-Type": 'application/json; charset=utf-8',
+        }),
+      })
+      console.log(response)
+      if (response.ok) {
+        Alert.alert(
+          "Sucesso!",
+          "você acaba de criar um usuário",
+          [
+            { text: "Ok", onPress: () => navigation.navigate("Login") }
+          ],
+        )
+      } else {
+        const body = await response.json();
+        Alert.alert(
+          "Opa",
+          body.mensagem,
+          [
+            {
+              text: "Ok"
+            },
+            {
+              text: "Voltar"
+            }
+          ]
+
+        )
+      }
     } catch (err) {
       if (err instanceof Yup.ValidationError) {
         const errorMessages = {};
@@ -69,7 +96,7 @@ const SignUp = ({navigation}) => {
         err.inner.forEach((error) => {
           errorMessages[error.path] = error.message;
         });
-
+        console.log("deu ruim")
         formRef.current.setErrors(errorMessages);
       }
     }
@@ -83,7 +110,7 @@ const SignUp = ({navigation}) => {
         {/* <Image source={LogoPhoenix} style={styles.logo} /> */}
         <Form style={styles.forms} ref={formRef} onSubmit={handleSubmit}>
           <Input name="Nome" type="text" title="Nome" />
-          <Input name="sobrenome" type="text" title="Sobrenome" />
+          <Input name="Sobrenome" type="text" title="Sobrenome" />
           <Input name="Email" type="email" title="Email" />
           <Input
             name="Senha"
@@ -92,7 +119,7 @@ const SignUp = ({navigation}) => {
             secureTextEntry={true}
           />
           <Input
-            name="ConfirmSenha"
+            name="ConfirmeSenha"
             type="password"
             title="Confirmar Senha"
             secureTextEntry={true}
@@ -117,7 +144,7 @@ const SignUp = ({navigation}) => {
               style={styles.buttons}
               color="#63b370"
               title="Cadastrar"
-              onPress={handleSubmit}
+              onPress={() => formRef.current.submitForm()}
             />
           </View>
         </Form>

@@ -21,16 +21,26 @@ const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
 const App = () => {
   const [isAuth, setIsAuth] = useState(false)
-  const [userData, _SetUserData] = useState(null);
   const setUserData = async (userData) => {
     await AsyncStorage.setItem("userData", JSON.stringify(userData))
     setIsAuth(true);
   };
   const getUserData = async () => {
       const userData = await AsyncStorage.getItem("userData");
+      
       return JSON.parse(userData);
   }
 
+  // useEffect(() => {
+  //   async function handleLogged(){
+  //     const user = await getUserData();
+  //     console.log(user)
+  //     if(!!user){
+  //       setIsAuth(true);
+  //     }
+  //   }
+  //   handleLogged()
+  // },[])
   return (
 
     <NavigationContainer>
@@ -40,7 +50,7 @@ const App = () => {
             <Stack.Screen
               name="Main"
               component={Main}
-              initialParams={{setIsAuth, getUserData}}
+              initialParams={{setIsAuth, getUserData,setUserData}}
               options={
                 {
                   header: (props) => <View></View>,
